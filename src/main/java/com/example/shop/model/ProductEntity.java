@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class ProductEntity {
 
     // Primary key for the ProductEntity table
-    private String id;
+    private int id;
 
     // ID of the user who posted the product
     private String userId;

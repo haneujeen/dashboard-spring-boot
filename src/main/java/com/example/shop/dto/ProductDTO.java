@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class ProductDTO {
 
-    private String id;      // Primary key for the ProductEntity table
+    private int id;         // Primary key for the ProductEntity table
     private String title;   // Title or name of the product
     private String material;// Material used to make the product
     private Double price;   // Price of the product
