@@ -1,7 +1,7 @@
 package com.example.shop.persistence;
 
-import org.springframework.stereotype.Repository;
+import com.example.shop.model.ProductEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public class ProductRepository {
+public interface ProductRepository extends JpaRepository<ProductEntity, String> {
 }
