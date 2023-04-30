@@ -24,7 +24,7 @@ public class ProductEntity {
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    private int id;
+    private String id;
 
     // ID of the user who posted the product
     private String userId;
