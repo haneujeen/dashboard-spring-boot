@@ -22,7 +22,7 @@ public class ProductController {
     public ResponseEntity<?> getProductDTO() {
         // Create a sample ProductEntity object
         ProductEntity productEntity = new ProductEntity();
-        productEntity.setId(1);
+        productEntity.setId("1");
         productEntity.setTitle("Furniture Product");
         productEntity.setMaterial("Wood");
         productEntity.setPrice(1000.0);
