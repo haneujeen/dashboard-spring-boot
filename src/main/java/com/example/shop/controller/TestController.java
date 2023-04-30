@@ -20,25 +20,25 @@ public class TestController {
     }
 
     // A GET request that returns a message with a path variable
-    @GetMapping("/message/{id}")
+    @GetMapping("/{id}")
     public String getMessageWithPathVariable(@PathVariable(required = false) String id) {
         return "This is a test message with path variable '" + id + "'.";
     }
 
     // A GET request that returns a message with a request parameter
-    @GetMapping("/message")
+    @GetMapping("/param")
     public String getMessageWithRequestParam(@RequestParam(required = false) String message) {
         return "This is a test message with request parameter: " + message;
     }
 
     // A GET request that returns a message with a request body parameter
-    @GetMapping("/message")
+    @GetMapping("/body")
     public String getMessageWithRequestBody(@RequestBody TestRequestBodyDTO requestBody) {
         return "This is a test message with id '" + requestBody.getId() + "' and message " + requestBody.getMessage();
     }
 
     // A GET request that returns a response DTO containing a list of strings
-    @GetMapping("/message")
+    @GetMapping("/response")
     public ResponseDTO<String> getMessageWithResponseBody() {
         List<String> list = new ArrayList<>();
         list.add("This is the first string in the list");
@@ -49,7 +49,7 @@ public class TestController {
     }
 
     // A GET request that returns a response entity with a status containing a response DTO
-    @GetMapping("/message")
+    @GetMapping("/response-entity")
     public ResponseEntity<?> getMessageWithResponseEntity() {
         List<String> list = new ArrayList<>();
         list.add("This is the first string in the list");
