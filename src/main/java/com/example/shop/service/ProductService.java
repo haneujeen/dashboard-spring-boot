@@ -2,11 +2,15 @@ package com.example.shop.service;
 
 import com.example.shop.model.ProductEntity;
 import com.example.shop.persistence.ProductRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 // This ProductService class is a service layer component
 // that interacts with the persistence layer through the injected ProductRepository.
+@Slf4j
 @Service
 public class ProductService {
 
@@ -26,5 +30,37 @@ public class ProductService {
 
         ProductEntity savedEntity = repository.findById(entity.getId()).get();
         return savedEntity.getTitle();
+    }
+
+    /**
+     * Creates a new product entity and saves it to the database.
+     * Returns a list of all products with the same user ID as the created entity.
+     *
+     * @param entity The product entity to create and save.
+     * @return A list of all products with the same user ID as the created entity.
+     * @throws RuntimeException if the entity is null or if the user ID is null.
+     */
+    public List<ProductEntity> create(final ProductEntity entity) {
+
+        // Throw a runtime exception if the entity is null
+        if (entity == null) {
+            log.warn("The product entity is null");
+            throw new RuntimeException("Product entity cannot be null");
+        }
+
+        // Throw a runtime exception if the user ID is null
+        if (entity.getUserId() == null) {
+            log.warn("The user ID is null");
+            throw new RuntimeException("User ID cannot be null");
+        }
+
+        // Save the entity to the database
+        repository.save(entity);
+
+        // Log the ID of the created product entity
+        log.info("Product with ID {} created", entity.getId());
+
+        // Return a list of all products with the same user ID as the created entity
+        return repository.findByUserId(entity.getUserId());
     }
 }
