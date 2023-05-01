@@ -74,4 +74,9 @@ public class ProductService {
             throw new RuntimeException("User ID cannot be null");
         }
     }
+
+    // Retrieves a list of all products with the given user ID from the repository
+    public List<ProductEntity> retrieve(final String userId) {
+        return repository.findByUserId(userId);
+    }
 }
