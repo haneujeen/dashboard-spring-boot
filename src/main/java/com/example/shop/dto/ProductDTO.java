@@ -32,4 +32,19 @@ public class ProductDTO {
         this.material = entity.getMaterial();
         this.price = entity.getPrice();
     }
+
+    /**
+     * Converts a ProductDTO to a ProductEntity.
+     *
+     * @param dto the ProductDTO to be converted
+     * @return a ProductEntity created from the given ProductDTO
+     */
+    public static ProductEntity toEntity(final ProductDTO dto) {
+        return ProductEntity.builder()
+                .id(dto.getId())
+                .title(dto.getTitle())
+                .material(dto.getMaterial())
+                .price(dto.getPrice())
+                .build();
+    }
 }
