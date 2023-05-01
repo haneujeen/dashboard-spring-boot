@@ -22,6 +22,10 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/product")
 public class ProductController {
 
+    // Inject the ProductService dependency
+    @Autowired
+    private ProductService service;
+
     // Test method to get ProductDTO response
     @GetMapping("/product-dto")
     public ResponseEntity<?> getProductDTO() {
@@ -36,9 +40,6 @@ public class ProductController {
         ProductDTO response = new ProductDTO(productEntity);
         return ResponseEntity.ok().body(response);
     }
-
-    @Autowired
-    private ProductService service;
 
     // Test method to get message response
     @GetMapping("/service-message")
@@ -71,7 +72,7 @@ public class ProductController {
      * @param dto the ProductDTO object to be created
      * @return a ResponseEntity with a list of ProductDTO objects wrapped in a ResponseDTO object
      */
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<?> createProduct(@RequestBody ProductDTO dto) {
         try {
             // Creating a test user ID to assign to the created product entity
@@ -109,5 +110,30 @@ public class ProductController {
                     .build();
             return ResponseEntity.badRequest().body(response);
         }
+    }
+
+    /**
+     * Retrieves a list of ProductDTO objects from the database through the ProductService
+     * and sends it as an HTTP response wrapped in a ResponseDTO object.
+     *
+     * @return a ResponseEntity with a list of ProductDTO objects wrapped in a ResponseDTO object as the body
+     */
+    @GetMapping
+    public ResponseEntity<?> retrieveProductList() {
+        String testUserId = "test-user";
+
+        // Retrieve all ProductEntity objects belonging to the test user with ID "test-user"
+        List<ProductEntity> entities = service.retrieve(testUserId);
+
+        // Convert the retrieved ProductEntity objects to ProductDTO objects
+        List<ProductDTO> dtos = entities.stream()
+                .map(ProductDTO::new)
+                .collect(Collectors.toList());
+
+        // Wrap the ProductDTO objects in a ResponseDTO object and return it as an HTTP response with a status code of 200 (OK)
+        ResponseDTO<ProductDTO> response = ResponseDTO.<ProductDTO>builder()
+                .data(dtos)
+                .build();
+        return ResponseEntity.ok().body(response);
     }
 }
