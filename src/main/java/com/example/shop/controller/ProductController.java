@@ -136,4 +136,91 @@ public class ProductController {
                 .build();
         return ResponseEntity.ok().body(response);
     }
+
+    /**
+     * Endpoint for deleting a product by ID.
+     *
+     * @param dto the ProductDTO object containing the ID of the product to be deleted
+     * @return a ResponseEntity with a list of ProductDTO objects wrapped in a ResponseDTO object
+     */
+    @DeleteMapping
+    public ResponseEntity<?> deleteProduct(@RequestBody ProductDTO dto) {
+        try {
+            // Creating a test user ID to use as a filter when deleting the product entity
+            String testUserId = "test-user";
+
+            // Convert the received ProductDTO object to a ProductEntity object
+            ProductEntity entity = ProductDTO.toEntity(dto);
+
+            // Set the user ID of the ProductEntity object to the test user ID
+            entity.setUserId(testUserId);
+
+            // Call the ProductService's delete method to delete the product entity from the database
+            List<ProductEntity> entities = service.delete(entity);
+
+            // Convert the deleted ProductEntity objects to ProductDTO objects
+            List<ProductDTO> dtos = entities.stream()
+                    .map(ProductDTO::new)
+                    .collect(Collectors.toList());
+
+            // Create a ResponseDTO object to wrap the ProductDTO objects and send it as an HTTP response
+            ResponseDTO<ProductDTO> response = ResponseDTO.<ProductDTO>builder()
+                    .data(dtos)
+                    .build();
+
+            // Return an HTTP response with a status code of 200 (OK) and the ResponseDTO object as the body
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e) {
+            // If an exception is caught, create a ResponseDTO object with an error message and send it as a bad request
+            String errorMessage = e.getMessage();
+            ResponseDTO<ProductDTO> response = ResponseDTO.<ProductDTO>builder()
+                    .errorMessage(errorMessage)
+                    .build();
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    /**
+     * Endpoint for updating a product.
+     *
+     * @param dto the ProductDTO object containing the data to be updated
+     * @return a ResponseEntity with a list of ProductDTO objects wrapped in a ResponseDTO object
+     */
+    @PutMapping
+    public ResponseEntity<?> updateProduct(@RequestBody ProductDTO dto) {
+        try {
+            // Creating a test user ID to use as a filter when updating the product entity
+            String testUserId = "test-user";
+
+            // Convert the received ProductDTO object to a ProductEntity object
+            ProductEntity entity = ProductDTO.toEntity(dto);
+
+            // Set the user ID of the ProductEntity object to the test user ID
+            entity.setUserId(testUserId);
+
+            // Call the ProductService's update method to update the product entity in the database
+            List<ProductEntity> entities = service.update(entity);
+
+            // Convert the updated ProductEntity objects to ProductDTO objects
+            List<ProductDTO> dtos = entities.stream()
+                    .map(ProductDTO::new)
+                    .collect(Collectors.toList());
+
+            // Create a ResponseDTO object to wrap the ProductDTO objects and send it as an HTTP response
+            ResponseDTO<ProductDTO> response = ResponseDTO.<ProductDTO>builder()
+                    .data(dtos)
+                    .build();
+
+            // Return an HTTP response with a status code of 200 (OK) and the ResponseDTO object as the body
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e) {
+            // If an exception is caught, create a ResponseDTO object with an error message and send it as a bad request
+            String errorMessage = e.getMessage();
+            ResponseDTO<ProductDTO> response = ResponseDTO.<ProductDTO>builder()
+                    .errorMessage(errorMessage)
+                    .build();
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
 }
