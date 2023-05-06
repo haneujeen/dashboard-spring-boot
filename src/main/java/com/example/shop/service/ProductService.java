@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 // This ProductService class is a service layer component
 // that interacts with the persistence layer through the injected ProductRepository.
@@ -56,6 +57,33 @@ public class ProductService {
     }
 
     /**
+     * Updates the title of an existing product entity in the database.
+     * Returns a list of all products with the same user ID as the updated entity.
+     *
+     * @param entity The product entity to update.
+     * @return A list of all products with the same user ID as the updated entity.
+     * @throws RuntimeException if the entity is null or if the ID or user ID is null.
+     */
+    public List<ProductEntity> update(final ProductEntity entity) {
+
+        // Validate the entity before updating it in the database
+        validate(entity);
+
+        // Retrieve the existing entity from the database
+        Optional<ProductEntity> optionalEntity = repository.findById(entity.getId());
+
+        // Update the title of the entity if it exists in the database
+        optionalEntity.ifPresent(product -> {
+            product.setTitle(entity.getTitle());
+            repository.save(product);
+        });
+
+        // Return a list of all products with the same user ID as the updated entity
+        return retrieve(entity.getUserId());
+    }
+
+
+    /**
      * Validates a product entity.
      *
      * @param entity The product entity to validate.
@@ -73,6 +101,34 @@ public class ProductService {
             log.warn("The user ID is null");
             throw new RuntimeException("User ID cannot be null");
         }
+    }
+
+    /**
+     * Deletes an existing product entity from the database.
+     * Returns a list of all products with the same user ID as the deleted entity.
+     *
+     * @param entity The product entity to delete.
+     * @return A list of all products with the same user ID as the deleted entity.
+     * @throws RuntimeException if the entity is null or if the ID or user ID is null,
+     *         or if an error occurs while deleting the entity.
+     */
+    public List<ProductEntity> delete(final ProductEntity entity) {
+
+        // Validate the entity before deleting it from the database
+        validate(entity);
+
+        try {
+            // Attempt to delete the entity from the database
+            repository.delete(entity);
+        } catch (Exception e) {
+            // Log the error message with the ID of the entity
+            log.error("Error deleting product with ID " + entity.getId() + ": " + e.getMessage());
+            // Throw a runtime exception with the error message
+            throw new RuntimeException("Error deleting product with ID " + entity.getId() + ": " + e.getMessage());
+        }
+
+        // Return a list of all products with the same user ID as the deleted entity
+        return retrieve(entity.getUserId());
     }
 
     // Retrieves a list of all products with the given user ID from the repository
