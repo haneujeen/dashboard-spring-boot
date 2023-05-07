@@ -5,6 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * A Data Transfer Object representing a user, used for authentication purpose.
+ * Contains a JWT token generated for user authentication and user information.
+ */
 @Data
 @Builder
 @NoArgsConstructor

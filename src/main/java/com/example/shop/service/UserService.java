@@ -6,12 +6,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service layer for managing UserEntity objects.
+ * Contains methods for adding new users and retrieving existing users by credentials.
+ */
 @Slf4j
 @Service
 public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    // This method adds a user to the database if they don't already exist
+    // and returns the saved user object
     public UserEntity addUser(final UserEntity userEntity) {
         if (userEntity == null || userEntity.getEmail() == null) {
             throw new RuntimeException("Invalid arguments");
@@ -26,6 +32,8 @@ public class UserService {
         return userRepository.save(userEntity);
     }
 
+    // This method returns a user by their email and password if the combination
+    // is valid and exists in the database, otherwise it returns null
     public UserEntity getUserByCredentials(final String email, final String password) {
         return userRepository.findByEmailAndPassword(email, password);
     }
