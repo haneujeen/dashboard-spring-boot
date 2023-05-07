@@ -3,6 +3,7 @@ package com.example.shop.controller;
 import com.example.shop.dto.ResponseDTO;
 import com.example.shop.dto.UserDTO;
 import com.example.shop.model.UserEntity;
+import com.example.shop.security.TokenProvider;
 import com.example.shop.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,14 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // Create a new user
+    @Autowired
+    private TokenProvider tokenProvider;
+
+    /**
+     * Creates a new user
+     * @param userDTO UserDTO containing user details
+     * @return ResponseEntity containing the created user's data or an error response
+     */
     @PostMapping("/signup")
     public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
         try {
@@ -49,7 +57,11 @@ public class UserController {
         }
     }
 
-    // Authenticate a user
+    /**
+     * Authenticates a user
+     * @param userDTO UserDTO containing user credentials
+     * @return ResponseEntity containing the authenticated user's data or an error response
+     */
     @PostMapping("/signin")
     public ResponseEntity<?> authenticate(@RequestBody UserDTO userDTO) {
         // Check if the user credentials are valid
@@ -59,10 +71,13 @@ public class UserController {
         );
 
         if (user != null) {
+            final String token = tokenProvider.generate(user);
+
             // If the user credentials are valid, return the user's data
             final UserDTO responseUserDTO = UserDTO.builder()
                     .email(user.getEmail())
                     .id(user.getId())
+                    .token(token)
                     .build();
             return ResponseEntity.ok().body(responseUserDTO);
         } else {
