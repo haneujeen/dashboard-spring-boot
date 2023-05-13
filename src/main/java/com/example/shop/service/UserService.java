@@ -4,6 +4,7 @@ import com.example.shop.model.UserEntity;
 import com.example.shop.persistence.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -34,7 +35,13 @@ public class UserService {
 
     // This method returns a user by their email and password if the combination
     // is valid and exists in the database, otherwise it returns null
-    public UserEntity getUserByCredentials(final String email, final String password) {
-        return userRepository.findByEmailAndPassword(email, password);
+    public UserEntity getUserByCredentials(final String email, final String password,
+                                           final PasswordEncoder encoder) {
+        final UserEntity user = userRepository.findByEmail(email);
+
+        if (user != null && encoder.matches(password, user.getPassword())) {
+            return user;
+        }
+        return null;
     }
 }
