@@ -12,6 +12,7 @@ import com.example.shop.model.ProductEntity;
 import com.example.shop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -73,11 +74,9 @@ public class ProductController {
      * @return a ResponseEntity with a list of ProductDTO objects wrapped in a ResponseDTO object
      */
     @PostMapping
-    public ResponseEntity<?> createProduct(@RequestBody ProductDTO dto) {
-        try {
-            // Creating a test user ID to assign to the created product entity
-            String testUserId = "test-user";
+    public ResponseEntity<?> createProduct(@AuthenticationPrincipal String userId, @RequestBody ProductDTO dto) {
 
+        try {
             // Convert the received ProductDTO object to a ProductEntity object
             ProductEntity entity = ProductDTO.toEntity(dto);
 
@@ -85,7 +84,7 @@ public class ProductController {
             entity.setId(null);
 
             // Set the user ID of the ProductEntity object to the test user ID
-            entity.setUserId(testUserId);
+            entity.setUserId(userId);
 
             // Call the ProductService's create method to create the new product entity in the database
             List<ProductEntity> entities = service.create(entity);
@@ -119,11 +118,9 @@ public class ProductController {
      * @return a ResponseEntity with a list of ProductDTO objects wrapped in a ResponseDTO object as the body
      */
     @GetMapping
-    public ResponseEntity<?> retrieveProductList() {
-        String testUserId = "test-user";
-
+    public ResponseEntity<?> retrieveProductList(@AuthenticationPrincipal String userId) {
         // Retrieve all ProductEntity objects belonging to the test user with ID "test-user"
-        List<ProductEntity> entities = service.retrieve(testUserId);
+        List<ProductEntity> entities = service.retrieve(userId);
 
         // Convert the retrieved ProductEntity objects to ProductDTO objects
         List<ProductDTO> dtos = entities.stream()
@@ -144,16 +141,13 @@ public class ProductController {
      * @return a ResponseEntity with a list of ProductDTO objects wrapped in a ResponseDTO object
      */
     @DeleteMapping
-    public ResponseEntity<?> deleteProduct(@RequestBody ProductDTO dto) {
+    public ResponseEntity<?> deleteProduct(@AuthenticationPrincipal String userId, @RequestBody ProductDTO dto) {
         try {
-            // Creating a test user ID to use as a filter when deleting the product entity
-            String testUserId = "test-user";
-
             // Convert the received ProductDTO object to a ProductEntity object
             ProductEntity entity = ProductDTO.toEntity(dto);
 
             // Set the user ID of the ProductEntity object to the test user ID
-            entity.setUserId(testUserId);
+            entity.setUserId(userId);
 
             // Call the ProductService's delete method to delete the product entity from the database
             List<ProductEntity> entities = service.delete(entity);
@@ -187,16 +181,13 @@ public class ProductController {
      * @return a ResponseEntity with a list of ProductDTO objects wrapped in a ResponseDTO object
      */
     @PutMapping
-    public ResponseEntity<?> updateProduct(@RequestBody ProductDTO dto) {
+    public ResponseEntity<?> updateProduct(@AuthenticationPrincipal String userId, @RequestBody ProductDTO dto) {
         try {
-            // Creating a test user ID to use as a filter when updating the product entity
-            String testUserId = "test-user";
-
             // Convert the received ProductDTO object to a ProductEntity object
             ProductEntity entity = ProductDTO.toEntity(dto);
 
             // Set the user ID of the ProductEntity object to the test user ID
-            entity.setUserId(testUserId);
+            entity.setUserId(userId);
 
             // Call the ProductService's update method to update the product entity in the database
             List<ProductEntity> entities = service.update(entity);
