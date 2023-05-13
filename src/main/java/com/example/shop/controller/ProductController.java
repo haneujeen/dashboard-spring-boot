@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/product")
 public class ProductController {
-
     // Inject the ProductService dependency
     @Autowired
     private ProductService service;
@@ -70,6 +69,7 @@ public class ProductController {
     /**
      * Endpoint for creating a new product.
      *
+     * @param userId the user ID used for authentication
      * @param dto the ProductDTO object to be created
      * @return a ResponseEntity with a list of ProductDTO objects wrapped in a ResponseDTO object
      */
@@ -83,7 +83,7 @@ public class ProductController {
             // Set the ID of the ProductEntity object to null to ensure it gets a new ID
             entity.setId(null);
 
-            // Set the user ID of the ProductEntity object to the test user ID
+            // Set the user ID of the ProductEntity object to the authenticated user's ID
             entity.setUserId(userId);
 
             // Call the ProductService's create method to create the new product entity in the database
@@ -115,11 +115,12 @@ public class ProductController {
      * Retrieves a list of ProductDTO objects from the database through the ProductService
      * and sends it as an HTTP response wrapped in a ResponseDTO object.
      *
+     * @param userId the user ID for authentication
      * @return a ResponseEntity with a list of ProductDTO objects wrapped in a ResponseDTO object as the body
      */
     @GetMapping
     public ResponseEntity<?> retrieveProductList(@AuthenticationPrincipal String userId) {
-        // Retrieve all ProductEntity objects belonging to the test user with ID "test-user"
+        // Retrieve all ProductEntity objects belonging to the authenticated user
         List<ProductEntity> entities = service.retrieve(userId);
 
         // Convert the retrieved ProductEntity objects to ProductDTO objects
@@ -137,6 +138,7 @@ public class ProductController {
     /**
      * Endpoint for deleting a product by ID.
      *
+     * @param userId the user ID for authentication
      * @param dto the ProductDTO object containing the ID of the product to be deleted
      * @return a ResponseEntity with a list of ProductDTO objects wrapped in a ResponseDTO object
      */
@@ -146,7 +148,7 @@ public class ProductController {
             // Convert the received ProductDTO object to a ProductEntity object
             ProductEntity entity = ProductDTO.toEntity(dto);
 
-            // Set the user ID of the ProductEntity object to the test user ID
+            // Set the user ID of the ProductEntity object
             entity.setUserId(userId);
 
             // Call the ProductService's delete method to delete the product entity from the database
@@ -177,6 +179,7 @@ public class ProductController {
     /**
      * Endpoint for updating a product.
      *
+     * @param userId the user ID for authentication
      * @param dto the ProductDTO object containing the data to be updated
      * @return a ResponseEntity with a list of ProductDTO objects wrapped in a ResponseDTO object
      */
@@ -186,7 +189,7 @@ public class ProductController {
             // Convert the received ProductDTO object to a ProductEntity object
             ProductEntity entity = ProductDTO.toEntity(dto);
 
-            // Set the user ID of the ProductEntity object to the test user ID
+            // Set the user ID of the ProductEntity object
             entity.setUserId(userId);
 
             // Call the ProductService's update method to update the product entity in the database
