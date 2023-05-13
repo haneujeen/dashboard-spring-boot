@@ -51,6 +51,7 @@ public class UserController {
                     .email(createdUser.getEmail())
                     .id(createdUser.getId())
                     .username(createdUser.getUsername())
+                    .password(createdUser.getPassword())
                     .build();
             return ResponseEntity.ok().body(responseUserDTO);
         } catch (Exception e) {
@@ -81,6 +82,7 @@ public class UserController {
             final UserDTO responseUserDTO = UserDTO.builder()
                     .email(user.getEmail())
                     .id(user.getId())
+                    .password(user.getPassword())
                     .token(token)
                     .build();
             return ResponseEntity.ok().body(responseUserDTO);
