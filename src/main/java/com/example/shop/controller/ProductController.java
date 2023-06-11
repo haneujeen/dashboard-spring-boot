@@ -1,15 +1,10 @@
-/**
- * The ProductController class is a REST controller that handles HTTP requests related to products.
- * It interacts with the ProductService to perform CRUD operations on the ProductEntity objects
- * and convert them to/from ProductDTO objects.
- */
-
 package com.example.shop.controller;
 
 import com.example.shop.dto.ProductDTO;
 import com.example.shop.dto.ResponseDTO;
 import com.example.shop.model.ProductEntity;
 import com.example.shop.service.ProductService;
+import com.example.shop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,32 +14,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for handling product-related HTTP requests.
+ * Interacts with the ProductService to perform CRUD operations on the ProductEntity objects
+ * and convert them to/from ProductDTO objects.
+ *
+ * DTO objects are wrapped into ResponseDTO objects and sent to the client as HTTP responses.
+ */
 @RestController
 @RequestMapping("/api/product")
 public class ProductController {
-    // Inject the ProductService dependency
-    @Autowired
-    private ProductService service;
 
-    // Test method to get ProductDTO response
-    @GetMapping("/product-dto")
-    public ResponseEntity<?> getProductDTO() {
-        // Create a sample ProductEntity object
-        ProductEntity productEntity = new ProductEntity();
-        productEntity.setId("1");
-        productEntity.setTitle("Furniture Product");
-        productEntity.setMaterial("Wood");
-        productEntity.setPrice(1000.0);
+    // Create a sample product
+    @GetMapping("/test")
+    public ResponseEntity<?> getProduct() {
+        ProductEntity entity = new ProductEntity();
+        entity.setTitle("Silicone Spatula");
+        entity.setMaterial("Silicone");
+        entity.setCompany("AmazonBasics");
+        entity.setPrice(6.99);
 
-        // Convert the ProductEntity to ProductDTO and send the response
-        ProductDTO response = new ProductDTO(productEntity);
+        // Convert the ProductEntity to ProductDTO to send the response
+        ProductDTO response = new ProductDTO(entity);
         return ResponseEntity.ok().body(response);
     }
 
-    // Test method to get message response
-    @GetMapping("/service-message")
+    // Test getMessage()
+    @GetMapping("/test/message")
     public ResponseEntity<?> getMessage() {
-        String message = service.getMessage();
+        String message = productService.getMessage();
 
         List<String> list = new ArrayList<>();
         list.add(message);
@@ -53,12 +51,10 @@ public class ProductController {
         return ResponseEntity.ok().body(response);
     }
 
-    // Retrieves the title of a ProductEntity object from the database through the ProductService,
-    // wraps it in a ResponseDTO object and sends it as an HTTP response.
-    @GetMapping("/service-title")
+    // Test getProductTitle()
+    @GetMapping("/test/title")
     public ResponseEntity<?> getTitle() {
-        String title = service.getProductTitle();
-
+        String title = productService.getProductTitle();
         List<String> list = new ArrayList<>();
         list.add(title);
         ResponseDTO<String> response = ResponseDTO.<String>builder().data(list).build();
@@ -66,12 +62,18 @@ public class ProductController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private ProductService productService;
+
     /**
      * Endpoint for creating a new product.
      *
-     * @param userId the user ID used for authentication
+     * @param userId the user ID
      * @param dto the ProductDTO object to be created
-     * @return a ResponseEntity with a list of ProductDTO objects wrapped in a ResponseDTO object
+     * @return ResponseEntity containing a list of created products wrapped in a ResponseDTO object,
+     *         or an error message if an exception occurs.
      */
     @PostMapping
     public ResponseEntity<?> createProduct(@AuthenticationPrincipal String userId, @RequestBody ProductDTO dto) {
@@ -80,16 +82,16 @@ public class ProductController {
             // Convert the received ProductDTO object to a ProductEntity object
             ProductEntity entity = ProductDTO.toEntity(dto);
 
-            // Set the ID of the ProductEntity object to null to ensure it gets a new ID
+            // Set the ID to null to ensure the ProductEntity object gets a new ID
             entity.setId(null);
 
-            // Set the user ID of the ProductEntity object to the authenticated user's ID
-            entity.setUserId(userId);
+            // Set the user of the ProductEntity object to the authenticated user
+            entity.setUser(userService.findById(userId));
 
-            // Call the ProductService's create method to create the new product entity in the database
-            List<ProductEntity> entities = service.create(entity);
+            // Call create method from service layer and create new product entity in the database
+            List<ProductEntity> entities = productService.create(entity);
 
-            // Convert the created ProductEntity objects to ProductDTO objects
+            // Convert the entity objects to DTO objects
             List<ProductDTO> dtos = entities.stream()
                     .map(ProductDTO::new)
                     .collect(Collectors.toList());
@@ -112,23 +114,20 @@ public class ProductController {
     }
 
     /**
-     * Retrieves a list of ProductDTO objects from the database through the ProductService
-     * and sends it as an HTTP response wrapped in a ResponseDTO object.
+     * Retrieves a ProductDTO objects.
      *
-     * @param userId the user ID for authentication
-     * @return a ResponseEntity with a list of ProductDTO objects wrapped in a ResponseDTO object as the body
+     * @param userId the user ID
+     * @return ResponseEntity with a list of retrieved products wrapped in a ResponseDTO object
      */
     @GetMapping
-    public ResponseEntity<?> retrieveProductList(@AuthenticationPrincipal String userId) {
-        // Retrieve all ProductEntity objects belonging to the authenticated user
-        List<ProductEntity> entities = service.retrieve(userId);
+    public ResponseEntity<?> retrieveProducts(@AuthenticationPrincipal String userId) {
+        // Retrieve all ProductEntity objects of the authenticated user
+        List<ProductEntity> entities = productService.retrieve(userId);
 
-        // Convert the retrieved ProductEntity objects to ProductDTO objects
         List<ProductDTO> dtos = entities.stream()
                 .map(ProductDTO::new)
                 .collect(Collectors.toList());
 
-        // Wrap the ProductDTO objects in a ResponseDTO object and return it as an HTTP response with a status code of 200 (OK)
         ResponseDTO<ProductDTO> response = ResponseDTO.<ProductDTO>builder()
                 .data(dtos)
                 .build();
@@ -136,38 +135,30 @@ public class ProductController {
     }
 
     /**
-     * Endpoint for deleting a product by ID.
+     * Endpoint for updating a product.
      *
-     * @param userId the user ID for authentication
-     * @param dto the ProductDTO object containing the ID of the product to be deleted
-     * @return a ResponseEntity with a list of ProductDTO objects wrapped in a ResponseDTO object
+     * @param userId the user ID
+     * @param dto the ProductDTO object
+     * @return ResponseEntity containing a list of updated products wrapped in a ResponseDTO object,
+     *         or an error message if an exception occurs.
      */
-    @DeleteMapping
-    public ResponseEntity<?> deleteProduct(@AuthenticationPrincipal String userId, @RequestBody ProductDTO dto) {
+    @PutMapping
+    public ResponseEntity<?> updateProduct(@AuthenticationPrincipal String userId, @RequestBody ProductDTO dto) {
         try {
-            // Convert the received ProductDTO object to a ProductEntity object
             ProductEntity entity = ProductDTO.toEntity(dto);
+            entity.setUser(userService.findById(userId));
 
-            // Set the user ID of the ProductEntity object
-            entity.setUserId(userId);
+            List<ProductEntity> entities = productService.update(entity);
 
-            // Call the ProductService's delete method to delete the product entity from the database
-            List<ProductEntity> entities = service.delete(entity);
-
-            // Convert the deleted ProductEntity objects to ProductDTO objects
             List<ProductDTO> dtos = entities.stream()
                     .map(ProductDTO::new)
                     .collect(Collectors.toList());
 
-            // Create a ResponseDTO object to wrap the ProductDTO objects and send it as an HTTP response
             ResponseDTO<ProductDTO> response = ResponseDTO.<ProductDTO>builder()
                     .data(dtos)
                     .build();
-
-            // Return an HTTP response with a status code of 200 (OK) and the ResponseDTO object as the body
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
-            // If an exception is caught, create a ResponseDTO object with an error message and send it as a bad request
             String errorMessage = e.getMessage();
             ResponseDTO<ProductDTO> response = ResponseDTO.<ProductDTO>builder()
                     .errorMessage(errorMessage)
@@ -177,38 +168,31 @@ public class ProductController {
     }
 
     /**
-     * Endpoint for updating a product.
+     * Endpoint for deleting a product by ID.
      *
-     * @param userId the user ID for authentication
-     * @param dto the ProductDTO object containing the data to be updated
-     * @return a ResponseEntity with a list of ProductDTO objects wrapped in a ResponseDTO object
+     * @param userId the user ID
+     * @param dto the ProductDTO object
+     * @return ResponseEntity containing a list of remaining products wrapped in a ResponseDTO object,
+     *         or an error message if an exception occurs.
      */
-    @PutMapping
-    public ResponseEntity<?> updateProduct(@AuthenticationPrincipal String userId, @RequestBody ProductDTO dto) {
+    @DeleteMapping
+    public ResponseEntity<?> deleteProduct(@AuthenticationPrincipal String userId, @RequestBody ProductDTO dto) {
         try {
-            // Convert the received ProductDTO object to a ProductEntity object
             ProductEntity entity = ProductDTO.toEntity(dto);
 
-            // Set the user ID of the ProductEntity object
-            entity.setUserId(userId);
+            entity.setUser(userService.findById(userId));
 
-            // Call the ProductService's update method to update the product entity in the database
-            List<ProductEntity> entities = service.update(entity);
+            List<ProductEntity> entities = productService.delete(entity);
 
-            // Convert the updated ProductEntity objects to ProductDTO objects
             List<ProductDTO> dtos = entities.stream()
                     .map(ProductDTO::new)
                     .collect(Collectors.toList());
 
-            // Create a ResponseDTO object to wrap the ProductDTO objects and send it as an HTTP response
             ResponseDTO<ProductDTO> response = ResponseDTO.<ProductDTO>builder()
                     .data(dtos)
                     .build();
-
-            // Return an HTTP response with a status code of 200 (OK) and the ResponseDTO object as the body
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
-            // If an exception is caught, create a ResponseDTO object with an error message and send it as a bad request
             String errorMessage = e.getMessage();
             ResponseDTO<ProductDTO> response = ResponseDTO.<ProductDTO>builder()
                     .errorMessage(errorMessage)
@@ -216,5 +200,4 @@ public class ProductController {
             return ResponseEntity.badRequest().body(response);
         }
     }
-
 }

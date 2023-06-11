@@ -30,3 +30,126 @@ This project uses the following libraries and dependencies:
 5. Material-UI Icons 5.11.16
 
 All of these libraries and dependencies are installed when building the project via Gradle (for backend) and npm (for frontend), as specified in the `build.gradle` and `package.json` files respectively.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+And some sample products for testing... 🙄
+```agsl
+{
+    "title": "Silicone Spatula",
+    "material": "Silicone",
+    "company": "AmazonBasics",
+    "price": 6.99
+},
+{
+    "title": "Seed Starter Kit",
+    "material": "Mixed",
+    "company": "Gardeners",
+    "price": 20.00
+},
+{
+    "title": "Cotton Bath Towel",
+    "material": "Cotton",
+    "company": "Bed Bath & Beyond",
+    "price": 15.99
+},
+{
+    "title": "Wooden Cutting Board",
+    "material": "Bamboo",
+    "company": "IKEA",
+    "price": 19.99
+},
+{
+    "title": "Stainless Steel Watering Can",
+    "material": "Stainless Steel",
+    "company": "Gardeners",
+    "price": 25.99
+},
+{
+    "title": "Ceramic Vase",
+    "material": "Ceramic",
+    "company": "West Elm",
+    "price": 45.00
+},
+{
+    "title": "Stainless Steel Knife",
+    "material": "Stainless Steel",
+    "company": "Cuisipro",
+    "price": 13.95
+},
+{
+    "title": "Non-Stick Frying Pan",
+    "material": "Aluminium",
+    "company": "T-fal",
+    "price": 24.99
+},
+{
+    "title": "Garden Spade",
+    "material": "Steel",
+    "company": "Gardeners",
+    "price": 15.00
+},
+{
+    "title": "Wooden Bookshelf",
+    "material": "Oak",
+    "company": "IKEA",
+    "price": 175.00
+},
+{
+    "title": "Cotton Bed Sheet",
+    "material": "Cotton",
+    "company": "AmazonBasics",
+    "price": 60.00
+},
+{
+    "title": "Soft Touch Bath Towel",
+    "material": "Cotton",
+    "company": "Target",
+    "price": 10.99
+},
+{
+    "title": "Cotton Quilt",
+    "material": "Cotton",
+    "company": "Bed Bath & Beyond",
+    "price": 50.00
+},
+{
+    "title": "Microfiber Throw Blanket",
+    "material": "Microfiber",
+    "company": "AmazonBasics",
+    "price": 25.00
+},
+{
+    "title": "Fleece Blanket",
+    "material": "Fleece",
+    "company": "Target",
+    "price": 20.00
+},
+{
+    "title": "Toothbrush Holder",
+    "material": "Plastic",
+    "company": "AmazonBasics",
+    "price": 5.00
+},
+{
+    "title": "Woven Area Rug",
+    "material": "Polyester",
+    "company": "IKEA",
+    "price": 60.00
+}
+```
