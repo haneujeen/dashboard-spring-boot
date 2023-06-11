@@ -8,8 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
- * Service layer for managing UserEntity objects.
- * Contains methods for adding new users and retrieving existing users by credentials.
+ * Service layer for managing UserEntity objects (adding new user and retrieving user by id or email and password.
  */
 @Slf4j
 @Service
@@ -17,8 +16,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    // This method adds a user to the database if they don't already exist
-    // and returns the saved user object
+    // Add a user to the database if they don't already exist and return the UserEntity object
     public UserEntity addUser(final UserEntity userEntity) {
         if (userEntity == null || userEntity.getEmail() == null) {
             throw new RuntimeException("Invalid arguments");
@@ -33,8 +31,13 @@ public class UserService {
         return userRepository.save(userEntity);
     }
 
-    // This method returns a user by their email and password if the combination
-    // is valid and exists in the database, otherwise it returns null
+    public UserEntity getUserById(String id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    // Return UserEntity object if email and password are valid and exists in the database,
+    // otherwise return null
     public UserEntity getUserByCredentials(final String email, final String password,
                                            final PasswordEncoder encoder) {
         final UserEntity user = userRepository.findByEmail(email);

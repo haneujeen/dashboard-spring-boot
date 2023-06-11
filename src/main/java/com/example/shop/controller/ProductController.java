@@ -86,7 +86,7 @@ public class ProductController {
             entity.setId(null);
 
             // Set the user of the ProductEntity object to the authenticated user
-            entity.setUser(userService.findById(userId));
+            entity.setUser(userService.getUserById(userId));
 
             // Call create method from service layer and create new product entity in the database
             List<ProductEntity> entities = productService.create(entity);
@@ -146,7 +146,7 @@ public class ProductController {
     public ResponseEntity<?> updateProduct(@AuthenticationPrincipal String userId, @RequestBody ProductDTO dto) {
         try {
             ProductEntity entity = ProductDTO.toEntity(dto);
-            entity.setUser(userService.findById(userId));
+            entity.setUser(userService.getUserById(userId));
 
             List<ProductEntity> entities = productService.update(entity);
 
@@ -180,7 +180,7 @@ public class ProductController {
         try {
             ProductEntity entity = ProductDTO.toEntity(dto);
 
-            entity.setUser(userService.findById(userId));
+            entity.setUser(userService.getUserById(userId));
 
             List<ProductEntity> entities = productService.delete(entity);
 
