@@ -1,6 +1,6 @@
-package com.example.shop.dto;
+package com.example.demo.dto;
 
-import com.example.shop.model.ProductEntity;
+import com.example.demo.model.ProductEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.example.shop.security;
+package com.example.demo.security;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

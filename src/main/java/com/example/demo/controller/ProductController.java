@@ -1,10 +1,10 @@
-package com.example.shop.controller;
+package com.example.demo.controller;
 
-import com.example.shop.dto.ProductDTO;
-import com.example.shop.dto.ResponseDTO;
-import com.example.shop.model.ProductEntity;
-import com.example.shop.service.ProductService;
-import com.example.shop.service.UserService;
+import com.example.demo.dto.ProductDTO;
+import com.example.demo.dto.ResponseDTO;
+import com.example.demo.model.ProductEntity;
+import com.example.demo.service.ProductService;
+import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

@@ -6,9 +6,9 @@
  * The validateAndGetUserId method parses a given token string and retrieves the user ID from its payload.
  * The SECRET_KEY variable is used as the secret key for generating and validating tokens.
  */
-package com.example.shop.security;
+package com.example.demo.security;
 
-import com.example.shop.model.UserEntity;
+import com.example.demo.model.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

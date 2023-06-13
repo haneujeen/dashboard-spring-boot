@@ -1,10 +1,10 @@
-package com.example.shop.controller;
+package com.example.demo.controller;
 
-import com.example.shop.dto.ResponseDTO;
-import com.example.shop.dto.UserDTO;
-import com.example.shop.model.UserEntity;
-import com.example.shop.security.TokenProvider;
-import com.example.shop.service.UserService;
+import com.example.demo.dto.ResponseDTO;
+import com.example.demo.dto.UserDTO;
+import com.example.demo.model.UserEntity;
+import com.example.demo.security.TokenProvider;
+import com.example.demo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

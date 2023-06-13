@@ -1,7 +1,7 @@
-package com.example.shop.service;
+package com.example.demo.service;
 
-import com.example.shop.model.ProductEntity;
-import com.example.shop.persistence.ProductRepository;
+import com.example.demo.model.ProductEntity;
+import com.example.demo.persistence.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

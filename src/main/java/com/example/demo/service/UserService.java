@@ -1,7 +1,7 @@
-package com.example.shop.service;
+package com.example.demo.service;
 
-import com.example.shop.model.UserEntity;
-import com.example.shop.persistence.UserRepository;
+import com.example.demo.model.UserEntity;
+import com.example.demo.persistence.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

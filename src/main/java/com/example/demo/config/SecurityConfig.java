@@ -1,6 +1,6 @@
-package com.example.shop.config;
+package com.example.demo.config;
 
-import com.example.shop.security.JwtAuthenticationFilter;
+import com.example.demo.security.JwtAuthenticationFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-            .antMatchers("/users/**").permitAll()
+            .antMatchers("/users/**", "/health").permitAll()
             .anyRequest().authenticated();
 
         http.addFilterAfter(jwtAuthenticationFilter, CorsFilter.class);
