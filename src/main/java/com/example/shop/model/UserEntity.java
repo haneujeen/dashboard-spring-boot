@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * The UserEntity class represents the User table in the database.
@@ -25,13 +26,10 @@ public class UserEntity {
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
-
-    @Column(nullable = false)
-    private String username;
-
     @Column(nullable = false)
     private String email;
-
     @Column(nullable = false)
     private String password;
+    @Column(nullable = false)
+    private String username;
 }

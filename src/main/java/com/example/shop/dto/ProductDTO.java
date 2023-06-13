@@ -20,7 +20,7 @@ public class ProductDTO {
     private String material;
     private Double price;
     private String company;
-    private String userId;
+    private String username;
 
     /**
      * Constructor for creating a ProductDTO from a ProductEntity.
@@ -32,7 +32,7 @@ public class ProductDTO {
         this.material = entity.getMaterial();
         this.price = entity.getPrice();
         this.company = entity.getCompany();
-        this.userId = entity.getUser().getId();
+        this.username = entity.getUser().getUsername();
     }
 
     /**
