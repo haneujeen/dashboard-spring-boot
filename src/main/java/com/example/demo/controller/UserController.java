@@ -83,6 +83,7 @@ public class UserController {
                     .email(user.getEmail())
                     .id(user.getId())
                     .password(user.getPassword())
+                    .username(user.getUsername())
                     .token(token)
                     .build();
             return ResponseEntity.ok().body(responseUserDTO);
