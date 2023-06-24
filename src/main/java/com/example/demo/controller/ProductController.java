@@ -83,7 +83,6 @@ public class ProductController {
             ProductEntity entity = ProductDTO.toEntity(dto);
 
             // Set the ID to null to ensure the ProductEntity object gets a new ID
-            entity.setId(null);
 
             // Set the user of the ProductEntity object to the authenticated user
             entity.setUser(userService.getUserById(userId));

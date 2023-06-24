@@ -28,6 +28,7 @@ public class ProductDTO {
      * @param entity the ProductEntity to be converted
      */
     public ProductDTO(final ProductEntity entity) {
+        this.id = entity.getId();
         this.title = entity.getTitle();
         this.material = entity.getMaterial();
         this.price = entity.getPrice();
